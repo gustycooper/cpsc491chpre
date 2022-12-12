@@ -1,0 +1,11 @@
+../chpre/chpre < $1 > g.s
+../chasm/chasm g.s
+#following shows how to extract file name from $1
+filename=$(basename -- "$1")
+extension="${filename##*.}"
+filename="${filename%.*}"
+newfn="$filename.o"
+#echo $filename
+#echo $extension
+#echo $newfn
+mv g.o $newfn
