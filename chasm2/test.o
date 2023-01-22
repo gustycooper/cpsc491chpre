@@ -1,0 +1,199 @@
+#define PROC 0x10
+#define X 7
+.data 0x100
+.label a
+5
+.label b
+X
+.label c
+25
+.text 0x200
+ldr r1, c
+ldr r0, a
+mov lr, 10
+add r0, r0, r1
+str r0, b
+mov r1, X
+mov r1, 7
+ldr r2, [sp, PROC]
+ldr r2, [sp, 0x10]
+.label end
+PROC X
+ldr r2, 45
+.data 0x100
+number: 0x00000005
+number: 0x00000007
+number: 0x00000019
+.text 0x200
+ldrstr: 0x10100108
+ldrstr: 0x10000100
+movcmp: 0x80e0000a
+arilog: 0x50001000
+ldrstr: 0x30000104
+movcmp: 0x80100007
+movcmp: 0x80100007
+ldrstr: 0x122d0010
+ldrstr: 0x122d0010
+number: 0x00000010
+ldrstr: 0x1020002d
+.ymbl
+a 0x100 1
+b 0x104 1
+c 0x108 1
+end 0x224 2
+*******************************
+**** dict contents ****
+key: a, value: 256 section: 1
+key: b, value: 260 section: 1
+key: c, value: 264 section: 1
+key: end, value: 548 section: 2
+totelems: 4, totcols: 0
+linenum: 1, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:    proc | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:    0x10 | t.toks[2].toktype:     number | t.toks[2].tokv   :      16 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 2, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       x | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:     number | t.toks[2].tokv   :       7 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 3, line type: data, numtoks: 3, address: 0 section: 0
+t.toks[0].tok_str:   .data | t.toks[0].toktype:       data | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   0x100 | t.toks[1].toktype:     number | t.toks[1].tokv   :     256 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:       endd | t.toks[2].tokv   :       7 | 
+
+linenum: 4, line type: label, numtoks: 3, address: 256 section: 1
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       a | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:       endd | t.toks[2].tokv   :       7 | 
+
+linenum: 5, line type: number, numtoks: 2, address: 256 section: 0
+t.toks[0].tok_str:       5 | t.toks[0].toktype:     number | t.toks[0].tokv   :       5 | 
+t.toks[1].tok_str:       a | t.toks[1].toktype:       endd | t.toks[1].tokv   :       0 | 
+
+linenum: 6, line type: label, numtoks: 3, address: 260 section: 1
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       b | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:       endd | t.toks[2].tokv   :       7 | 
+
+linenum: 7, line type: ident, numtoks: 2, address: 260 section: 0
+t.toks[0].tok_str:       7 | t.toks[0].toktype:     number | t.toks[0].tokv   :       7 | 
+t.toks[1].tok_str:       b | t.toks[1].toktype:       endd | t.toks[1].tokv   :       0 | 
+
+linenum: 8, line type: label, numtoks: 3, address: 264 section: 1
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       c | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:       endd | t.toks[2].tokv   :       7 | 
+
+linenum: 9, line type: number, numtoks: 2, address: 264 section: 0
+t.toks[0].tok_str:      25 | t.toks[0].toktype:     number | t.toks[0].tokv   :      25 | 
+t.toks[1].tok_str:       c | t.toks[1].toktype:       endd | t.toks[1].tokv   :       0 | 
+
+linenum: 10, line type: text, numtoks: 3, address: 0 section: 0
+t.toks[0].tok_str:   .text | t.toks[0].toktype:       text | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   0x200 | t.toks[1].toktype:     number | t.toks[1].tokv   :     512 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:       endd | t.toks[2].tokv   :       7 | 
+
+linenum: 11, line type: inst, numtoks: 5, address: 512 section: 0
+  inst type: ldr,   inst cate: 0,   inst opcd: 0x00000010
+t.toks[0].tok_str:     ldr | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r1 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       1 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       c | t.toks[3].toktype:      ident | t.toks[3].tokv   :     264 | 
+t.toks[4].tok_str:  (null) | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 12, line type: inst, numtoks: 5, address: 516 section: 0
+  inst type: ldr,   inst cate: 0,   inst opcd: 0x00000010
+t.toks[0].tok_str:     ldr | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r0 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       a | t.toks[3].toktype:      ident | t.toks[3].tokv   :     256 | 
+t.toks[4].tok_str:  (null) | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 13, line type: inst, numtoks: 5, address: 520 section: 0
+  inst type: mov,   inst cate: 2,   inst opcd: 0x00000080
+t.toks[0].tok_str:     mov | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      lr | t.toks[1].toktype:        reg | t.toks[1].tokv   :      14 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:      10 | t.toks[3].toktype:     number | t.toks[3].tokv   :      10 | 
+t.toks[4].tok_str:  (null) | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 14, line type: inst, numtoks: 7, address: 524 section: 0
+  inst type: add,   inst cate: 1,   inst opcd: 0x00000050
+t.toks[0].tok_str:     add | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r0 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:      r0 | t.toks[3].toktype:        reg | t.toks[3].tokv   :       0 | 
+t.toks[4].tok_str:       , | t.toks[4].toktype:      comma | t.toks[4].tokv   :       0 | 
+t.toks[5].tok_str:      r1 | t.toks[5].toktype:        reg | t.toks[5].tokv   :       1 | 
+t.toks[6].tok_str:  (null) | t.toks[6].toktype:       endd | t.toks[6].tokv   :       0 | 
+
+linenum: 15, line type: inst, numtoks: 5, address: 528 section: 0
+  inst type: str,   inst cate: 0,   inst opcd: 0x00000030
+t.toks[0].tok_str:     str | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r0 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       b | t.toks[3].toktype:      ident | t.toks[3].tokv   :     260 | 
+t.toks[4].tok_str:       , | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 16, line type: inst, numtoks: 5, address: 532 section: 0
+  inst type: mov,   inst cate: 2,   inst opcd: 0x00000080
+t.toks[0].tok_str:     mov | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r1 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       1 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       7 | t.toks[3].toktype:     number | t.toks[3].tokv   :       7 | 
+t.toks[4].tok_str:       , | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 17, line type: inst, numtoks: 5, address: 536 section: 0
+  inst type: mov,   inst cate: 2,   inst opcd: 0x00000080
+t.toks[0].tok_str:     mov | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r1 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       1 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       7 | t.toks[3].toktype:     number | t.toks[3].tokv   :       7 | 
+t.toks[4].tok_str:       , | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 18, line type: inst, numtoks: 9, address: 540 section: 0
+  inst type: ldr,   inst cate: 0,   inst opcd: 0x00000012
+t.toks[0].tok_str:     ldr | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r2 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       2 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       [ | t.toks[3].toktype:  leftbrack | t.toks[3].tokv   :       0 | 
+t.toks[4].tok_str:      sp | t.toks[4].toktype:        reg | t.toks[4].tokv   :      13 | 
+t.toks[5].tok_str:       , | t.toks[5].toktype:      comma | t.toks[5].tokv   :       0 | 
+t.toks[6].tok_str:    0x10 | t.toks[6].toktype:     number | t.toks[6].tokv   :      16 | 
+t.toks[7].tok_str:       ] | t.toks[7].toktype: rightbrack | t.toks[7].tokv   :       0 | 
+t.toks[8].tok_str:  (null) | t.toks[8].toktype:       endd | t.toks[8].tokv   :       0 | 
+
+linenum: 19, line type: inst, numtoks: 9, address: 544 section: 0
+  inst type: ldr,   inst cate: 0,   inst opcd: 0x00000012
+t.toks[0].tok_str:     ldr | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r2 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       2 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       [ | t.toks[3].toktype:  leftbrack | t.toks[3].tokv   :       0 | 
+t.toks[4].tok_str:      sp | t.toks[4].toktype:        reg | t.toks[4].tokv   :      13 | 
+t.toks[5].tok_str:       , | t.toks[5].toktype:      comma | t.toks[5].tokv   :       0 | 
+t.toks[6].tok_str:    0x10 | t.toks[6].toktype:     number | t.toks[6].tokv   :      16 | 
+t.toks[7].tok_str:       ] | t.toks[7].toktype: rightbrack | t.toks[7].tokv   :       0 | 
+t.toks[8].tok_str:  (null) | t.toks[8].toktype:       endd | t.toks[8].tokv   :       0 | 
+
+linenum: 20, line type: label, numtoks: 3, address: 548 section: 2
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:     end | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
+linenum: 21, line type: ident, numtoks: 3, address: 548 section: 0
+t.toks[0].tok_str:    0x10 | t.toks[0].toktype:     number | t.toks[0].tokv   :      16 | 
+t.toks[1].tok_str:       7 | t.toks[1].toktype:     number | t.toks[1].tokv   :       7 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
+linenum: 22, line type: inst, numtoks: 5, address: 552 section: 0
+  inst type: ldr,   inst cate: 0,   inst opcd: 0x00000010
+t.toks[0].tok_str:     ldr | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r2 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       2 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:      45 | t.toks[3].toktype:     number | t.toks[3].tokv   :      45 | 
+t.toks[4].tok_str:      sp | t.toks[4].toktype:       endd | t.toks[4].tokv   :      13 | 
+

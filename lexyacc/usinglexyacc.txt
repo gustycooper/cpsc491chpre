@@ -1,0 +1,40 @@
+Compiling the Example Program
+
+Perform the following steps, in order, to create the desk calculator example program:
+
+1. Process the yacc grammar file using the -d optional flag (which tells the yacc command to create a file that defines the tokens used in addition to the C language source code):
+yacc -d calc.yacc
+
+2. Use the li command to verify that the following files were created:
+y.tab.c	The C language source file that the yacc command created for the parser.
+y.tab.h	A header file containing define statements for the tokens used by the parser.
+
+3. Process the lex specification file:
+lex calc.lex
+
+4. Use the li command to verify that the following file was created:
+lex.yy.c	The C language source file that the lex command created for the lexical analyzer.
+
+5. Compile and link the two C language source files:
+cc y.tab.c lex.yy.c
+
+6. Use the li command to verify that the following files were created:
+y.tab.o	The object file for the y.tab.c source file
+lex.yy.o	The object file for the lex.yy.c source file
+a.out	The executable program file
+
+7. To then run the program directly from the a.out file, enter:
+$ a.out
+
+or, to move the program to a file with a more descriptive name, as in the following example, and run it, enter:
+
+$ mv a.out calculate
+$ calculate
+
+In either case, after you start the program, the cursor moves to the line below the $ (command prompt). Then enter numbers and operators in calculator fashion. When you press the Enter key, the program displays the result of the operation. After you assign a value to a variable:
+m=4 <enter>
+_
+the cursor moves to the next line. When you use the variable in subsequent calculations, it will have the assigned value:
+m+5 <enter>
+9
+_

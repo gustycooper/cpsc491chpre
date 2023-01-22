@@ -1,0 +1,83 @@
+#define X 7
+#define REG pc
+#define REG13 r13
+#define PROC 0x11
+.text 0x200
+mov REG, 5
+mov r0, X
+ldr r5, [REG13, PROC]
+.label end
+HERE pc
+HERE r13
+.text 0x200
+movcmp: 0x80f00005
+movcmp: 0x80000007
+ldrstr: 0x125d0011
+.ymbl
+end 0x20c 2
+*******************************
+**** dict contents ****
+key: end, value: 524 section: 2
+totelems: 1, totcols: 0
+linenum: 1, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       x | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:     number | t.toks[2].tokv   :       7 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 2, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:     reg | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:      pc | t.toks[2].toktype:        reg | t.toks[2].tokv   :      15 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 3, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   reg13 | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:     r13 | t.toks[2].toktype:        reg | t.toks[2].tokv   :      13 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 4, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:    proc | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:    0x11 | t.toks[2].toktype:     number | t.toks[2].tokv   :      17 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 5, line type: text, numtoks: 3, address: 0 section: 0
+t.toks[0].tok_str:   .text | t.toks[0].toktype:       text | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   0x200 | t.toks[1].toktype:     number | t.toks[1].tokv   :     512 | 
+t.toks[2].tok_str:    0x11 | t.toks[2].toktype:       endd | t.toks[2].tokv   :      17 | 
+
+linenum: 6, line type: inst, numtoks: 5, address: 512 section: 0
+  inst type: mov,   inst cate: 2,   inst opcd: 0x00000080
+t.toks[0].tok_str:     mov | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      pc | t.toks[1].toktype:        reg | t.toks[1].tokv   :      15 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       5 | t.toks[3].toktype:     number | t.toks[3].tokv   :       5 | 
+t.toks[4].tok_str:  (null) | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 7, line type: inst, numtoks: 5, address: 516 section: 0
+  inst type: mov,   inst cate: 2,   inst opcd: 0x00000080
+t.toks[0].tok_str:     mov | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r0 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       7 | t.toks[3].toktype:     number | t.toks[3].tokv   :       7 | 
+t.toks[4].tok_str:  (null) | t.toks[4].toktype:       endd | t.toks[4].tokv   :       0 | 
+
+linenum: 8, line type: inst, numtoks: 9, address: 520 section: 0
+  inst type: ldr,   inst cate: 0,   inst opcd: 0x00000012
+t.toks[0].tok_str:     ldr | t.toks[0].toktype:       inst | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:      r5 | t.toks[1].toktype:        reg | t.toks[1].tokv   :       5 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:      comma | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:       [ | t.toks[3].toktype:  leftbrack | t.toks[3].tokv   :       0 | 
+t.toks[4].tok_str:     r13 | t.toks[4].toktype:        reg | t.toks[4].tokv   :      13 | 
+t.toks[5].tok_str:       , | t.toks[5].toktype:      comma | t.toks[5].tokv   :       0 | 
+t.toks[6].tok_str:    0x11 | t.toks[6].toktype:     number | t.toks[6].tokv   :      17 | 
+t.toks[7].tok_str:       ] | t.toks[7].toktype: rightbrack | t.toks[7].tokv   :       0 | 
+t.toks[8].tok_str:  (null) | t.toks[8].toktype:       endd | t.toks[8].tokv   :       0 | 
+
+linenum: 9, line type: label, numtoks: 3, address: 524 section: 2
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:     end | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       , | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+

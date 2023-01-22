@@ -1,0 +1,76 @@
+#define PROC 0x10
+#define X 7
+#define G GUSTY
+.data 0x100
+.label G
+0
+.text 0x200
+G
+.label end
+PROC X
+HERE gusty
+HERE gusty
+.data 0x100
+number: 0x00000000
+.text 0x200
+number: 0x00000100
+number: 0x00000010
+.ymbl
+gusty 0x100 1
+end 0x204 2
+*******************************
+**** dict contents ****
+key: gusty, value: 256 section: 1
+key: end, value: 516 section: 2
+totelems: 2, totcols: 0
+linenum: 1, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:    proc | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:    0x10 | t.toks[2].toktype:     number | t.toks[2].tokv   :      16 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 2, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       x | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:       7 | t.toks[2].toktype:     number | t.toks[2].tokv   :       7 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 3, line type: define, numtoks: 4, address: 0 section: 0
+t.toks[0].tok_str: #define | t.toks[0].toktype:     define | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       g | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:   gusty | t.toks[2].toktype:      ident | t.toks[2].tokv   :       0 | 
+t.toks[3].tok_str:  (null) | t.toks[3].toktype:       endd | t.toks[3].tokv   :       0 | 
+
+linenum: 4, line type: data, numtoks: 3, address: 0 section: 0
+t.toks[0].tok_str:   .data | t.toks[0].toktype:       data | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   0x100 | t.toks[1].toktype:     number | t.toks[1].tokv   :     256 | 
+t.toks[2].tok_str:   gusty | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
+linenum: 5, line type: label, numtoks: 3, address: 256 section: 1
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   gusty | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:   gusty | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
+linenum: 6, line type: number, numtoks: 2, address: 256 section: 0
+t.toks[0].tok_str:       0 | t.toks[0].toktype:     number | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:       g | t.toks[1].toktype:       endd | t.toks[1].tokv   :       0 | 
+
+linenum: 7, line type: text, numtoks: 3, address: 0 section: 0
+t.toks[0].tok_str:   .text | t.toks[0].toktype:       text | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:   0x200 | t.toks[1].toktype:     number | t.toks[1].tokv   :     512 | 
+t.toks[2].tok_str:   gusty | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
+linenum: 8, line type: ident, numtoks: 2, address: 512 section: 0
+t.toks[0].tok_str:   gusty | t.toks[0].toktype:      ident | t.toks[0].tokv   :     256 | 
+t.toks[1].tok_str:   0x200 | t.toks[1].toktype:       endd | t.toks[1].tokv   :     512 | 
+
+linenum: 9, line type: label, numtoks: 3, address: 516 section: 2
+t.toks[0].tok_str:  .label | t.toks[0].toktype:      label | t.toks[0].tokv   :       0 | 
+t.toks[1].tok_str:     end | t.toks[1].toktype:      ident | t.toks[1].tokv   :       0 | 
+t.toks[2].tok_str:   gusty | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
+linenum: 10, line type: ident, numtoks: 3, address: 516 section: 0
+t.toks[0].tok_str:    0x10 | t.toks[0].toktype:     number | t.toks[0].tokv   :      16 | 
+t.toks[1].tok_str:       7 | t.toks[1].toktype:     number | t.toks[1].tokv   :       7 | 
+t.toks[2].tok_str:   gusty | t.toks[2].toktype:       endd | t.toks[2].tokv   :       0 | 
+
