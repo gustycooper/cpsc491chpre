@@ -252,3 +252,43 @@ int isinst(struct toki_t t) {
         s = trans[s][t.toks[i++].toktype];
     return s < 0 ? -1 : opcode | trans[s][endd];
 }
+
+
+
+/*
+ #define macros have the format
+ <id> [ <id> , <id> ... ] <more tokens>
+ The <id>s inside the brackets can be from 1 to N
+ The state table and function validate upto the ]
+ The remainder of the macro definition is ignored.
+ */
+
+int macros[10][15] =
+      //  dat txt lab str ins cmt reg cma num   [   ]   ! idt bad end
+/* 0*/  { {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  1, -1, -1},
+/* 1*/    {-1, -1, -1, -1, -1, -1, -1, -1, -1,  2, -1, -1, -1, -1, -1},
+/* 2*/    {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  3, -1, -1},   // looking for id
+/* 3*/    {-1, -1, -1, -1, -1, -1, -1,  2, -1, -1, -4, -1, -1, -1, -1},   // id between [ and ] found
+        };
+
+#define PARAM_FOUND 3
+
+// Return of 0 is invalide
+// Return >0 is number of params between [ and ]
+// #define psh[r0] -> this begins at toks[1]
+int validmacro(struct toki_t t) {
+    int i = 1;  // t.toks[0] is #define
+    int numparams = 0;
+    int s = macros[0][t.toks[i++].toktype];
+    while (s >= 0 && t.toks[i].toktype != endd && t.toks[i].toktype != comment) {
+        if (s == PARAM_FOUND)
+            numparams++;
+        s = macros[s][t.toks[i++].toktype];
+    }
+    return s == -4 ? numparams : 0;
+}
+
+
+
+
+

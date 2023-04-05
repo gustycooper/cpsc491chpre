@@ -23,12 +23,24 @@ struct elem {
     struct elem *next;
     char *key;
     enum defdicttype type;
+    struct deftok *head;
     char *defvalue;
     int ivalue;
 };
 #define DICT_SIZE 31
 struct elem *defdict[DICT_SIZE] = { 0 };
 int def_num_elems = 0;
+
+
+
+struct tokv_t get(struct deftok *head, int index) {
+    struct deftok *current = head;
+    for (int i = 0; i < index; i++) {
+        current = current->next;
+    }
+    return current->tok;
+}
+
 
 /*
  defdictput - puts key, value pair in symbol table
@@ -55,6 +67,7 @@ int defdictputval(struct defdictval *dv) {
     e->key = strdup(key);
     e->type = dv->type;
     e->defvalue = dv->defvalue;
+    e->head = dv->head;
     e->ivalue = dv->ivalue;
     e->next = defdict[h];
     defdict[h] = e;
@@ -72,6 +85,7 @@ int defdictgetval(const char *key, struct defdictval *dv) {
         if (!strcmp(e->key, key)) {
             dv->key = strdup(key);
             dv->type = e->type;
+            dv->head = e->head;
             if (e->defvalue)
                 dv->defvalue = strdup(e->defvalue);
             else
@@ -98,11 +112,17 @@ void defdictprint(int verbose) {
                 totelems++;
                 col++;
             }
+            else if (e->type == DEFPARAMS) {
+                printf("\nkey: %s", e->key);
+                for (int i = 0; get(e->head, i).toktype != endd; i++) {
+                    printf("\nElement %d: %s\n", i, get(e->head, i).tok_str);
+                }
+            }
         }
         if (col > 1)
             totcols = totcols + (col - 1);
     }
     if (verbose)
-        printf("totelems: %d, totcols: %d\n", totelems, totcols);
+        printf("\ntotelems: %d, totcols: %d\n", totelems, totcols);
 }
 

@@ -70,10 +70,9 @@ struct inst_info ins[] = {
 };
 
 char *toks_t_str[] = { "data", "text", "label", "string", "inst", "comment",
-                        "reg", "comma", "number", "leftbrack", "rightbrack", "exclam", "ident", "err", "endd", "define" };
+                        "reg", "comma", "number", "leftbrack", "rightbrack", "exclam", "ident", "err", "endd", "define", "include", "string" };
 
 #define MAX_LINE 128        // maximum length of asm prog line
-#define MAX_TOKENS 15       // maximum number of tokens on asm program line
 #define MAX_PROG_LINES 2000 // maximum number of lines in an asm program
 
 static char buf[MAX_LINE];              // lines from .chasm file read into buf
@@ -125,10 +124,13 @@ void toksvalue(char *t, int n) {
         tok.toks[n].toktype = text;
     else if (strcmp(t, ".label") == 0 || strcmp(t, ".local") == 0 || strcmp(t, ".extern") == 0)
         tok.toks[n].toktype = label;
-    else if (strcmp(t, ".string") == 0)
+    else if (strcmp(t, ".string") == 0) {
         tok.toks[n].toktype = string;
+    }
     else if (strcmp(t, "#define") == 0)
         tok.toks[n].toktype = def;
+    else if (strcmp(t, "#include") == 0)
+        tok.toks[n].toktype = inc;
     else if (t[0] == ',')
         tok.toks[n].toktype = comma;
     else if (t[0] == '[')
@@ -402,13 +404,19 @@ int errors() {
     int errorfound = 0;
     for (int i = 0; i < linenum-1; i++) {
         if (toks[i].linetype > comment && toks[i].linetype != number && toks[i].linetype != ident && toks[i].linetype != def) {
-            fprintf(stderr, "+++ Error +++ Line number: %d\n", toks[i].linenum);
+            if (toks[i].fn != NULL) {
+                fprintf(stderr, "+++ Error +++ Line number: %d In File: %s\n", toks[i].linenum, toks[i].fn);
+            }
+            else {
+                fprintf(stderr, "+++ Error +++ Line number: %d", toks[i].linenum);
+            }
             for (int j = 0; j < toks[i].numtoks-1; j++) // numtoks-1 to ignore endd token
                 fprintf(stderr, "%s ", toks[i].toks[j].tok_str);
             fprintf(stderr, "\n");
             errorfound = 1;
         // Check for other errors, e.g. add r, r5, r5   .label without following num or inst
         }
+
     }
     return errorfound;
 }
@@ -629,6 +637,7 @@ void generatelisting() {
     fclose(f);
 }
 
+
 // dodefines processes lines 
 // 1. looking for macros on #define lines and processing them
 // 2. looking for macro invocations and performing substitutions
@@ -642,10 +651,12 @@ void dodefines() {
         // tok[2].str -> <num>,   tok[2].type -> number, tok[2].tokv -> value of <num>
         // tok[3].str -> NULL,    tok[3].type -> endd,   tok[3].tokv -> 0
             struct defdictval ddv;
+            int numparams;
             if (toks[i].numtoks == 4 && toks[i].toks[1].toktype == ident && toks[i].toks[2].toktype == number) {
                 ddv.key = strdup(toks[i].toks[1].tok_str);
                 ddv.type = DEFNUM;
                 ddv.defvalue = strdup(toks[i].toks[2].tok_str);
+                ddv.head = NULL;
                 ddv.ivalue = toks[i].toks[2].tokv;
                 defdictputval(&ddv);
                 // add string to symbol dictionary to prevent reusing #define <id> as a label somewhere
@@ -653,10 +664,32 @@ void dodefines() {
                 // We do not need this symbols in the .o. Create a way to mark these so as not to include them
                 //dictput(strdup(toks[i].toks[1].tok_str), 0, 0);
             }
-            else if (toks[i].numtoks == 4 && toks[i].toks[1].toktype == ident) {
+            // with params this is a bad if statement
+            else if ((numparams = validmacro(toks[i])) > 0) {
+                ddv.key = strdup(toks[i].toks[1].tok_str);
+                ddv.type = DEFPARAMS;
+
+                // Create LList of tokens
+                struct deftok *head = NULL;
+                for (int j = toks[i].numtoks-1; j >= 2; j--) { // Loops through each token in toks[i] and creates a linked list of them
+                    struct deftok *nextTok = (struct deftok*) calloc(sizeof(struct deftok), 1); // Goes backwards inserting at position 0 because
+                    nextTok->tok = toks[i].toks[j];                                          // that is the first way I found
+                    nextTok->next = head;
+                    head = nextTok;
+                }
+
+                ddv.head = head; // Set head
+                ddv.defvalue = NULL;
+                ddv.ivalue = 0;
+                defdictputval(&ddv);
+
+            }
+            else if (toks[i].numtoks == 4 && toks[i].toks[1].toktype == ident) { // prototype to check for param defines
                 ddv.key = strdup(toks[i].toks[1].tok_str);
                 ddv.type = DEFID;
+
                 ddv.defvalue = strdup(toks[i].toks[2].tok_str);
+                ddv.head = NULL;
                 ddv.ivalue = toks[i].toks[2].tokv;
                 defdictputval(&ddv);
                 // add string to symbol dictionary to prevent reusing #define <id> as a label somewhere
@@ -685,6 +718,78 @@ void dodefines() {
                             toksvalue(toks[i].toks[j].tok_str, j);
                             toks[i] = tok;
                         }
+                        else if (ddv.type == DEFPARAMS) {
+                            /// Gets all the tokens for the general define and puts them in a tokv_t array
+                            struct tokv_t macro[MAX_TOKENS];
+                            int macroLen = 0;
+                            struct tokv_t currTok = get(ddv.head, macroLen+3);
+                            while (currTok.toktype != endd) {
+                                macro[macroLen] = currTok;
+                                macroLen++;
+                                currTok = get(ddv.head, macroLen+3);
+                            }
+
+                            /// Looks though linked list and finds original identifier from define statement.
+                            /// Then checks for the replacement parameter in the line.
+                            /// Finally goes through marco - the array of tokens - and replaces the identifer with the parameter value.
+                            int k = 1;
+                            currTok = get(ddv.head, k);
+                            int paramLen = 0;
+                            while (currTok.toktype != rightbrack) {
+                               if (currTok.toktype == comma) {
+                                    continue;
+                               }
+                               paramLen++;
+                               struct tokv_t id = currTok;
+                               struct tokv_t value = toks[i].toks[j+k+1]; // j is key, +1 to get past bracket, k is parameter
+                               for (int m = 0; m < macroLen; m++) {
+                                    if ((macro[m].toktype == ident) && (strcmp(macro[m].tok_str, id.tok_str) == 0)) {
+                                        macro[m] = value;
+                                    }
+                               }
+                               k++;
+                               currTok = get(ddv.head, k);
+                            }
+                            /// Replaces the tokens on the line with the tokens in macro for the define statement.
+
+                            // Puts tokens before the define into new line
+                            struct tokv_t newLn[MAX_TOKENS];
+                            int newLnLen = 0;
+                            for (int x = 0; x < j; x++) {
+                                newLn[newLnLen] = toks[i].toks[x];
+                                newLnLen++;
+                            }
+
+                            // Does define
+                            for (int x = 0; x < macroLen; x++) {
+                                newLn[newLnLen] = macro[x];
+                                newLnLen++;
+                            }
+
+                            // Puts tokens after the define into new line
+                            int skipParam = j+(2*paramLen)+2;
+                            for (int x = 0; toks[i].toks[skipParam+x].toktype != endd; x++) {
+                                newLn[newLnLen] = toks[i].toks[skipParam+x];
+                                newLnLen++;
+                            }
+                            
+                            // Replace original line with new line
+                            for (int x = 0; x <= newLnLen; x++) {
+                                toks[i].toks[x] = newLn[x];
+                            }
+
+                            // Set endd token at end if it doesn't exist already
+                            if (toks[i].toks[newLnLen-1].toktype != endd) {
+                                struct tokv_t end;
+                                end.toktype = endd;
+                                end.tok_str = NULL;
+                                toks[i].toks[newLnLen] = end;
+                                newLnLen++;
+                            }
+                            toks[i].numtoks = newLnLen;
+                        }
+
+
                     }
                 }
             }
@@ -745,6 +850,78 @@ int get_opts(int count, char *args[]) {
     return good;
 
 }
+
+char *names[25];
+int top = 0;
+
+char *pshname(char *n) {
+    names[top] = n;
+    top++;
+    if (top >= sizeof(names)/sizeof(char *))
+        return 0;
+    else
+        return n;
+}
+
+char *popname() {
+    top--;
+    if (top < 0)
+        return 0;
+    else
+        return names[top];
+}
+
+int fileopen(char *n) {
+    for (int i = 0; i < top; i++)
+        if (strcmp(names[i], n) == 0)
+            return 1;
+    return 0;
+}
+void process_file(char *fn) {
+    if (fileopen(fn)) {
+        fprintf(stderr, "Recursive open: %s\n", fn);
+        exit(1);
+    }
+    FILE *f = fopen(fn, "r");
+    pshname(fn);
+    if (f == NULL) {
+        fprintf(stderr, "File %s not opened!\n", fn);
+        exit(1);
+    }
+    int filelinenum = 1;
+    // Loop - reads line, tokenizes line in tok, saves tok in array toks
+    while (1) {
+        if (fgets(buf, MAX_LINE, f) == 0)
+            break;
+        buf[strcspn(buf, "\n")] = '\0';
+        //printf("%s\n", buf);
+        if (buf[0] == '#' && buf[1] == 'i' && buf[2] == 'n' && buf[3] == 'c' && buf[4] == 'l' &&
+            buf[5] == 'u' && buf[6] == 'd' && buf[7] == 'e' && buf[8] == ' ' && buf[9] != '\0') {
+            char *ifn = strdup(buf+9);
+            //printf("%s\n", buf);  /// This line is what made the "#include" line stay in .o file
+            filelinenum++;           // counts linenums in current file
+            process_file(ifn);
+        }
+        else {
+            if (verbose)
+                printf("%s\n", buf);
+            tokenize();              // convert buf to a struct toki_t tok
+            tok.fn = fn;             /// Adds filename to tok for error messages
+            tok.linenum = filelinenum;
+            filelinenum++;
+            toks[linenum-1] = tok;   // save token in array of tokens
+            linenum++;
+            if (linenum >= MAX_PROG_LINES)
+                fprintf(stderr, "Too many lines, Max: %d\n", MAX_PROG_LINES);
+            }
+    }
+    fclose(f);
+    popname();
+}
+
+
+
+
 /*
  main - entry point for chasm.
  Options
@@ -777,12 +954,6 @@ int main(int argc, char **argv) {
     strcat(output, ".o");
     if (verbose)
         fprintf(stderr, "input: %s, output: %s\n", input, output);
-    // An open-do-close pattern to process the assembly file
-    FILE *fp;
-    if ((fp = fopen(input, "r")) == NULL) {
-        fprintf(stderr, "File %s not found!\n", input);
-        return -1;
-    }
     // chasm writes to stdout. dup2 output to stdout
     int fd = open(output, O_WRONLY | O_CREAT | O_TRUNC, 0644);
     int dup2stat = dup2(fd, 1);
@@ -791,19 +962,7 @@ int main(int argc, char **argv) {
         return -1;
     }
     close(fd);
-    // Loop - reads line, tokenizes line in tok, saves tok in array toks
-    while (fgets(buf, MAX_LINE, fp)) {
-        buf[strcspn(buf, "\n")] = '\0';
-        if (verbose)
-            printf("%s\n", buf);
-        tokenize();              // convert buf to a struct toki_t tok
-        tok.linenum = linenum;
-        toks[linenum-1] = tok;   // save token in array of tokens
-        linenum++;
-        if (linenum >= MAX_PROG_LINES)
-            fprintf(stderr, "Too many lines, Max: %d\n", MAX_PROG_LINES);
-    }
-    fclose(fp);                  // end open-do-close on assembly file
+    process_file(input);
     dodefines();                 // create macros and substitute macro invocations
     addrsymopcode();             // create symbol table and fill in toks[].address
     identifiers();
@@ -820,6 +979,7 @@ int main(int argc, char **argv) {
     if (verbose) {
         printf("*******************************\n");
         dictprint(verbose);
+        defdictprint(verbose);
         for (int i = 0; i < linenum-1; i++)
             printtok(toks[i]);
     }

@@ -1,6 +1,6 @@
 #ifndef CHASM_TYPES_H
 #define CHASM_TYPES_H
-#define MAX_TOKENS 15
+#define MAX_TOKENS 50 // maximum number of tokens on asm program line
 
 enum inst_c {
     ldrstr, arilog, movcmp, branch, 
@@ -36,7 +36,7 @@ enum toks_t {
     data, text, label, string, inst, 
     comment, reg, comma, number, 
     leftbrack, rightbrack, exclam, ident, 
-    err, endd, def
+    err, endd, def, inc
 };
 
 struct tokv_t {
@@ -49,6 +49,7 @@ struct toki_t {
     int  numtoks;                   // num of toks on line
     int  linenum;                   // line number
     int  address;                   // mem address of this line
+    char *fn;			    // filename of where token is originally from
     enum sections section;          // section of address
     enum toks_t linetype;           // type of line
     enum inst_t insttype;           // if line is inst_t, is ins type - ldr, mov, etc
